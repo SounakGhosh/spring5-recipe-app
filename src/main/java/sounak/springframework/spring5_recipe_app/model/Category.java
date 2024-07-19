@@ -2,6 +2,7 @@ package sounak.springframework.spring5_recipe_app.model;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -16,7 +17,7 @@ public class Category {
     private String description;
 
     @ManyToMany(mappedBy = "categories")
-    private Set<Recipe> recipes;
+    private Set<Recipe> recipes = new HashSet<>();
 
     public Long getId() {
         return id;
