@@ -8,6 +8,7 @@ import sounak.springframework.spring5_recipe_app.repositories.CategoryRepository
 import sounak.springframework.spring5_recipe_app.repositories.RecipeRepository;
 import sounak.springframework.spring5_recipe_app.repositories.UnitOfMeasureRepository;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +31,9 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
+        System.out.println("Loading data...");
         recipeRepository.saveAll(getRecipes());
+        System.out.println("Loaded data");
     }
 
     private List<Recipe> getRecipes() {
@@ -82,8 +85,8 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
         //get optionals
         UnitOfMeasure eachUom = eachUomOptional.get();
-        UnitOfMeasure tableSpoonUom = tableSpoonUomOptional.get();
-        UnitOfMeasure teaspoonUom = tableSpoonUomOptional.get();
+        UnitOfMeasure tablespoonUom = tableSpoonUomOptional.get();
+        UnitOfMeasure teaspoonUom = teaSpoonUomOptional.get();
         UnitOfMeasure dashUom = dashUomOptional.get();
         UnitOfMeasure pintUom = pintUomOptional.get();
         UnitOfMeasure cupsUom = cupsUomOptional.get();
@@ -121,16 +124,16 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         guacamoleNotes.setRecipe(guacamoleRecipe);
         guacamoleRecipe.setNotes(guacamoleNotes);
 
-        /*guacamoleRecipe.getIngredients().add(new Ingredient("ripe avocado", BigDecimal.valueOf(2), eachUom, guacamoleRecipe));
+        guacamoleRecipe.getIngredients().add(new Ingredient("ripe avocado", BigDecimal.valueOf(2), eachUom, guacamoleRecipe));
         guacamoleRecipe.getIngredients().add(new Ingredient("kosher salt", BigDecimal.valueOf(0.25), teaspoonUom, guacamoleRecipe));
-        guacamoleRecipe.getIngredients().add(new Ingredient("fresh lime or lemon juice", BigDecimal.ONE, tableSpoonUom, guacamoleRecipe));
-        guacamoleRecipe.getIngredients().add(new Ingredient("minced red onion or thinly sliced green onion", BigDecimal.valueOf(4), tableSpoonUom, guacamoleRecipe));
+        guacamoleRecipe.getIngredients().add(new Ingredient("fresh lime or lemon juice", BigDecimal.ONE, tablespoonUom, guacamoleRecipe));
+        guacamoleRecipe.getIngredients().add(new Ingredient("minced red onion or thinly sliced green onion", BigDecimal.valueOf(4), tablespoonUom, guacamoleRecipe));
         guacamoleRecipe.getIngredients().add(new Ingredient("serrano (or jalapeño) chilly, stems and seeds removed, minced", BigDecimal.valueOf(2), eachUom, guacamoleRecipe));
         guacamoleRecipe.getIngredients().add(new Ingredient("cilantro (leaves and tender stems), finely chopped", BigDecimal.valueOf(2), eachUom, guacamoleRecipe));
         guacamoleRecipe.getIngredients().add(new Ingredient("freshly ground black pepper", BigDecimal.ONE, pinchUom, guacamoleRecipe));
         guacamoleRecipe.getIngredients().add(new Ingredient("ripe tomato, chopped (optional)", BigDecimal.valueOf(0.5), eachUom, guacamoleRecipe));
         guacamoleRecipe.getIngredients().add(new Ingredient("red radish or jicama slices for garnish (optional)", null, null, guacamoleRecipe));
-        guacamoleRecipe.getIngredients().add(new Ingredient("tortilla chips, to serve", null, null, guacamoleRecipe));*/
+        guacamoleRecipe.getIngredients().add(new Ingredient("tortilla chips, to serve", null, null, guacamoleRecipe));
 
         guacamoleRecipe.getCategories().add(americanCategory);
         guacamoleRecipe.getCategories().add(mexicanCategory);
