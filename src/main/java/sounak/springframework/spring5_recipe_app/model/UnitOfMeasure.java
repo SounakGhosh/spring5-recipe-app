@@ -1,12 +1,14 @@
 package sounak.springframework.spring5_recipe_app.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.Set;
 
 /**
  * Created by sounak on 18-07-2024.
  */
+@Data
 @Entity
 public class UnitOfMeasure {
 
@@ -17,28 +19,4 @@ public class UnitOfMeasure {
 
     @OneToMany(mappedBy = "uom")
     private Set<Ingredient> ingredients;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Set<Ingredient> getIngredients() {
-        return ingredients;
-    }
-
-    public void setIngredients(Set<Ingredient> ingredients) {
-        this.ingredients = ingredients;
-    }
 }
