@@ -1,5 +1,6 @@
 package sounak.springframework.spring5_recipe_app.bootstrap;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,7 @@ import java.util.Optional;
 /**
  * Created by sounak on 19-07-2024.
  */
+@Slf4j
 @Component
 public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -33,9 +35,11 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
     @Override
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        System.out.println("Loading data...");
+        log.info("Loading data on startup...");
+
         recipeRepository.saveAll(getRecipes());
-        System.out.println("Data loaded");
+
+        log.info("Data loaded on startup");
     }
 
     private List<Recipe> getRecipes() {
