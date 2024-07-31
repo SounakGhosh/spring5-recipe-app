@@ -3,6 +3,7 @@ package sounak.springframework.spring5_recipe_app.bootstrap;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import sounak.springframework.spring5_recipe_app.model.*;
 import sounak.springframework.spring5_recipe_app.repositories.CategoryRepository;
 import sounak.springframework.spring5_recipe_app.repositories.RecipeRepository;
@@ -30,6 +31,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
     }
 
     @Override
+    @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
         System.out.println("Loading data...");
         recipeRepository.saveAll(getRecipes());
