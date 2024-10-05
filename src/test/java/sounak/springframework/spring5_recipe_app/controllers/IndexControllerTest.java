@@ -3,11 +3,16 @@ package sounak.springframework.spring5_recipe_app.controllers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.ui.Model;
+import sounak.springframework.spring5_recipe_app.model.Recipe;
 import sounak.springframework.spring5_recipe_app.services.RecipeService;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by sounak on 29-09-2024.
@@ -33,11 +38,32 @@ class IndexControllerTest {
 
     @Test
     void getIndexPage() {
-        String indexPage = controller.getIndexPage(model);
-        Assertions.assertEquals("index", indexPage);
 
+        //given
+        Set<Recipe> recipes = new HashSet<>();
+
+        Recipe recipe1 = new Recipe();
+        recipe1.setId(1L);
+
+        Recipe recipe2 = new Recipe();
+        recipe2.setId(2L);
+
+        recipes.add(recipe1);
+        recipes.add(recipe2);
+
+        Mockito.when(recipeService.getRecipes()).thenReturn(recipes);
+
+        ArgumentCaptor<Set<Recipe>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
+
+        //when
+        String indexPage = controller.getIndexPage(model);
+
+        //then
+        Assertions.assertEquals("index", indexPage);
         Mockito.verify(recipeService, Mockito.times(1)).getRecipes();
         Mockito.verify(model, Mockito.times(1))
-                .addAttribute(Mockito.eq("recipes"), Mockito.anySet());
+                .addAttribute(Mockito.eq("recipes"), argumentCaptor.capture());
+        Set<Recipe> setInController = argumentCaptor.getValue();
+        Assertions.assertEquals(2, setInController.size());
     }
 }
