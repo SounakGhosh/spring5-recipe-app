@@ -10,6 +10,7 @@ import sounak.springframework.spring5_recipe_app.model.Recipe;
 import sounak.springframework.spring5_recipe_app.repositories.RecipeRepository;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -32,7 +33,22 @@ class RecipeServiceImplTest {
     }
 
     @Test
-    void getRecipes() {
+    void getRecipeByIdTest() {
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+        Optional<Recipe> recipeOptional = Optional.of(recipe);
+
+        Mockito.when(recipeRepository.findById(Mockito.anyLong())).thenReturn(recipeOptional);
+
+        Recipe recipeReturned = recipeService.findById(1L);
+
+        Assertions.assertNotNull(recipeReturned, "Null recipe returned");
+        Mockito.verify(recipeRepository, Mockito.times(1)).findById(Mockito.anyLong());
+        Mockito.verify(recipeRepository, Mockito.never()).findAll();
+    }
+
+    @Test
+    void getRecipesTest() {
         Recipe recipe = new Recipe();
         HashSet<Recipe> recipesData = new HashSet<>();
         recipesData.add(recipe);

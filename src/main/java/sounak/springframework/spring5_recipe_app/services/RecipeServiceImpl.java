@@ -6,6 +6,7 @@ import sounak.springframework.spring5_recipe_app.model.Recipe;
 import sounak.springframework.spring5_recipe_app.repositories.RecipeRepository;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -28,5 +29,17 @@ public class RecipeServiceImpl implements RecipeService {
         Set<Recipe> recipes = new HashSet<>();
         recipeRepository.findAll().forEach(recipes::add);
         return recipes;
+    }
+
+    @Override
+    public Recipe findById(Long id) {
+
+        Optional<Recipe> recipeOptional = recipeRepository.findById(id);
+
+        if (recipeOptional.isEmpty()) {
+            throw new RuntimeException("Recipe Not Found!");
+        }
+
+        return recipeOptional.get();
     }
 }
