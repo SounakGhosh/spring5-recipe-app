@@ -157,8 +157,8 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         guacamoleRecipe.addIngredient(new Ingredient("cilantro (leaves and tender stems), finely chopped", BigDecimal.valueOf(2), eachUom));
         guacamoleRecipe.addIngredient(new Ingredient("freshly ground black pepper", BigDecimal.ONE, pinchUom));
         guacamoleRecipe.addIngredient(new Ingredient("ripe tomato, chopped (optional)", BigDecimal.valueOf(0.5), eachUom));
-        guacamoleRecipe.addIngredient(new Ingredient("red radish or jicama slices for garnish (optional)", null, null));
-        guacamoleRecipe.addIngredient(new Ingredient("tortilla chips, to serve", null, null));
+//        guacamoleRecipe.addIngredient(new Ingredient("red radish or jicama slices for garnish (optional)", null, null));
+//        guacamoleRecipe.addIngredient(new Ingredient("tortilla chips, to serve", null, null));
 
         guacamoleRecipe.getCategories().add(americanCategory);
         guacamoleRecipe.getCategories().add(mexicanCategory);
