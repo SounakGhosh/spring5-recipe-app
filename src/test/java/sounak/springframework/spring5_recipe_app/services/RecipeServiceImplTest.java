@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import sounak.springframework.spring5_recipe_app.converters.RecipeCommandToRecipe;
+import sounak.springframework.spring5_recipe_app.converters.RecipeToRecipeCommand;
 import sounak.springframework.spring5_recipe_app.model.Recipe;
 import sounak.springframework.spring5_recipe_app.repositories.RecipeRepository;
 
@@ -23,10 +25,16 @@ class RecipeServiceImplTest {
     @Mock
     RecipeRepository recipeRepository;
 
+    @Mock
+    RecipeCommandToRecipe recipeCommandToRecipe;
+
+    @Mock
+    RecipeToRecipeCommand recipeToRecipeCommand;
+
     @BeforeEach
     void setUp() {
         try (AutoCloseable ignored = MockitoAnnotations.openMocks(this);) {
-            recipeService = new RecipeServiceImpl(recipeRepository);
+            recipeService = new RecipeServiceImpl(recipeRepository, recipeCommandToRecipe, recipeToRecipeCommand);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
