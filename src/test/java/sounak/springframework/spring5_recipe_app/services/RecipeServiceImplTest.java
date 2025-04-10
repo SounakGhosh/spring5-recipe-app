@@ -33,7 +33,7 @@ class RecipeServiceImplTest {
     RecipeToRecipeCommand recipeToRecipeCommand;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         try (AutoCloseable ignored = MockitoAnnotations.openMocks(this);) {
             recipeService = new RecipeServiceImpl(recipeRepository, recipeCommandToRecipe, recipeToRecipeCommand);
         } catch (Exception e) {
@@ -42,7 +42,7 @@ class RecipeServiceImplTest {
     }
 
     @Test
-    void getRecipeByIdTest() {
+    public void getRecipeByIdTest() {
         Recipe recipe = new Recipe();
         recipe.setId(1L);
         Optional<Recipe> recipeOptional = Optional.of(recipe);
@@ -77,7 +77,7 @@ class RecipeServiceImplTest {
     }
 
     @Test
-    void getRecipesTest() {
+    public void getRecipesTest() {
         Recipe recipe = new Recipe();
         HashSet<Recipe> recipesData = new HashSet<>();
         recipesData.add(recipe);
@@ -89,5 +89,19 @@ class RecipeServiceImplTest {
         Assertions.assertEquals(1, recipes.size());
         Mockito.verify(recipeRepository, Mockito.times(1)).findAll();
         Mockito.verify(recipeRepository, Mockito.never()).findById(Mockito.anyLong());
+    }
+
+    @Test
+    public void deleteRecipeByIdTest() {
+        //given
+        Long idToDelete = 2L;
+
+        //when
+        recipeService.deleteById(idToDelete);
+
+        //no 'when', since method has void return type
+
+        //then
+        Mockito.verify(recipeRepository, Mockito.times(1)).deleteById(Mockito.anyLong());
     }
 }

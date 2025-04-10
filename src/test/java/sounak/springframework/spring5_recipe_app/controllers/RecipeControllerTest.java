@@ -68,9 +68,9 @@ class RecipeControllerTest {
         Mockito.when(recipeService.saveRecipeCommand(Mockito.any())).thenReturn(command);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/recipe")
-                                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-//                .param("id", "")
-//                .param("description", "some string")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("id", "")
+                        .param("description", "some string")
                 )
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
                 .andExpect(MockMvcResultMatchers.view().name("redirect:/recipe/2/show"));
@@ -87,5 +87,14 @@ class RecipeControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("recipe/recipeForm"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("recipe"));
+    }
+
+    @Test
+    public void deleteActionTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/1/delete"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers.view().name("redirect:/"));
+
+        Mockito.verify(recipeService, Mockito.times(1)).deleteById(Mockito.anyLong());
     }
 }
