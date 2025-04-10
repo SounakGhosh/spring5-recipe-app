@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import sounak.springframework.spring5_recipe_app.commands.RecipeCommand;
 import sounak.springframework.spring5_recipe_app.converters.RecipeCommandToRecipe;
 import sounak.springframework.spring5_recipe_app.converters.RecipeToRecipeCommand;
 import sounak.springframework.spring5_recipe_app.model.Recipe;
@@ -56,6 +57,26 @@ class RecipeServiceImplTest {
     }
 
     @Test
+    public void getRecipeCommandByIdTest() {
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+        Optional<Recipe> recipeOptional = Optional.of(recipe);
+
+        Mockito.when(recipeRepository.findById(Mockito.anyLong())).thenReturn(recipeOptional);
+
+        RecipeCommand recipeCommand = new RecipeCommand();
+        recipeCommand.setId(1L);
+
+        Mockito.when(recipeToRecipeCommand.convert(Mockito.any())).thenReturn(recipeCommand);
+
+        RecipeCommand commandById = recipeService.findCommandById(1L);
+
+        Assertions.assertNotNull(commandById, "Null recipe returned");
+        Mockito.verify(recipeRepository, Mockito.times(1)).findById(Mockito.anyLong());
+        Mockito.verify(recipeRepository, Mockito.never()).findAll();
+    }
+
+    @Test
     void getRecipesTest() {
         Recipe recipe = new Recipe();
         HashSet<Recipe> recipesData = new HashSet<>();
@@ -64,8 +85,9 @@ class RecipeServiceImplTest {
         Mockito.when(recipeRepository.findAll()).thenReturn(recipesData);
 
         Set<Recipe> recipes = recipeService.getRecipes();
-        Assertions.assertEquals(1, recipes.size());
 
+        Assertions.assertEquals(1, recipes.size());
         Mockito.verify(recipeRepository, Mockito.times(1)).findAll();
+        Mockito.verify(recipeRepository, Mockito.never()).findById(Mockito.anyLong());
     }
 }
