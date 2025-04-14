@@ -1,6 +1,7 @@
 package sounak.springframework.spring5_recipe_app.controllers;
 
 import org.mockito.Mockito;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import sounak.springframework.spring5_recipe_app.commands.IngredientCommand;
@@ -13,6 +14,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import sounak.springframework.spring5_recipe_app.services.UnitOfMeasureService;
+
+import java.util.HashSet;
 
 /**
  * Created by sounak on 12-04-2025.
@@ -25,6 +29,9 @@ public class IngredientControllerTest {
     @Mock
     RecipeService recipeService;
 
+    @Mock
+    UnitOfMeasureService unitOfMeasureService;
+
     IngredientController controller;
 
     MockMvc mockMvc;
@@ -32,7 +39,7 @@ public class IngredientControllerTest {
     @BeforeEach
     public void setUp() throws Exception {
         try (AutoCloseable ignored = MockitoAnnotations.openMocks(this)) {
-            controller = new IngredientController(recipeService, ingredientService);
+            controller = new IngredientController(recipeService, ingredientService, unitOfMeasureService);
             mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -70,4 +77,40 @@ public class IngredientControllerTest {
                 .andExpect(MockMvcResultMatchers.model().attributeExists("ingredient"));
     }
 
+    @Test
+    void updateIngredientFormTest() throws Exception {
+        //given
+        IngredientCommand ingredientCommand = new IngredientCommand();
+
+        //when
+        Mockito.when(ingredientService.findByRecipeIdAndIngredientId(Mockito.anyLong(), Mockito.anyLong())).thenReturn(ingredientCommand);
+        Mockito.when(unitOfMeasureService.listAllUnitOfMeasures()).thenReturn(new HashSet<>());
+
+        //then
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/1/ingredient/2/update"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("recipe/ingredient/ingredientForm"))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("ingredient"))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("uomList"));
+    }
+
+    @Test
+    void saveOrUpdateTest() throws Exception {
+        //given
+        IngredientCommand command = new IngredientCommand();
+        command.setId(3L);
+        command.setRecipeId(2L);
+
+        //when
+        Mockito.when(ingredientService.saveIngredientCommand(Mockito.any())).thenReturn(command);
+
+        //then
+        mockMvc.perform(MockMvcRequestBuilders.post("/recipe/2/ingredient")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("id", "")
+                        .param("description", "some string")
+                )
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers.view().name("redirect:/recipe/2/ingredient/3/show"));
+    }
 }

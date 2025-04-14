@@ -49,7 +49,7 @@ public class RecipeController {
 
     @PostMapping
     @RequestMapping("/recipe")
-    public String saveOrUpdateRecipe(@ModelAttribute RecipeCommand command) {
+    public String saveOrUpdate(@ModelAttribute RecipeCommand command) {
 
         RecipeCommand savedCommand = recipeService.saveRecipeCommand(command);
 
