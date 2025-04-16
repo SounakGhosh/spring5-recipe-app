@@ -30,7 +30,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-5">
-                                <form  action="http:\\localhost" method="post" enctype="multipart/form-data"
+                                <form method="post" enctype="multipart/form-data"
                                        th:action="@{'/recipe/' + ${recipe.getId()} + '/image'}">
                                     <label class="control-label">Select File</label>
                                     <input id="imageFile" name="imageFile" type="file" class="file">
