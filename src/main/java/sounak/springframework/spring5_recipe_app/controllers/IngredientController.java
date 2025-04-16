@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sounak.springframework.spring5_recipe_app.commands.IngredientCommand;
 import sounak.springframework.spring5_recipe_app.commands.RecipeCommand;
+import sounak.springframework.spring5_recipe_app.commands.UnitOfMeasureCommand;
 import sounak.springframework.spring5_recipe_app.services.IngredientService;
 import sounak.springframework.spring5_recipe_app.services.RecipeService;
 import sounak.springframework.spring5_recipe_app.services.UnitOfMeasureService;
@@ -52,6 +53,23 @@ public class IngredientController {
         ));
 
         return "recipe/ingredient/show";
+    }
+
+    @GetMapping
+    @RequestMapping("/recipe/{recipeId}/ingredient/new")
+    public String newRecipeIngredient(@PathVariable String recipeId, Model model) {
+
+        RecipeCommand recipeCommand = recipeService.findCommandById(Long.parseLong(recipeId));
+
+        IngredientCommand ingredientCommand = new IngredientCommand();
+        ingredientCommand.setRecipeId(Long.parseLong(recipeId));
+        ingredientCommand.setUnitOfMeasure(new UnitOfMeasureCommand());
+
+        model.addAttribute("ingredient", ingredientCommand);
+
+        model.addAttribute("uomList", unitOfMeasureService.listAllUnitOfMeasures());
+
+        return "recipe/ingredient/ingredientForm";
     }
 
     @GetMapping

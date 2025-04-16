@@ -50,15 +50,16 @@ public class IngredientControllerTest {
     public void listIngredientsTest() throws Exception {
         //given
         RecipeCommand recipeCommand = new RecipeCommand();
-        Mockito.when(recipeService.findCommandById(Mockito.anyLong())).thenReturn(recipeCommand);
 
         //when
+        Mockito.when(recipeService.findCommandById(Mockito.anyLong())).thenReturn(recipeCommand);
+
+        //then
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/1/ingredients"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("recipe/ingredient/list"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("recipe"));
 
-        //then
         Mockito.verify(recipeService, Mockito.times(1)).findCommandById(Mockito.anyLong());
     }
 
@@ -75,6 +76,27 @@ public class IngredientControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("recipe/ingredient/show"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("ingredient"));
+    }
+
+    @Test
+    void newIngredientFormTest() throws Exception {
+        //given
+        RecipeCommand recipeCommand = new RecipeCommand();
+        recipeCommand.setId(1L);
+
+        //when
+        Mockito.when(recipeService.findCommandById(Mockito.anyLong())).thenReturn(recipeCommand);
+        Mockito.when(unitOfMeasureService.listAllUnitOfMeasures()).thenReturn(new HashSet<>());
+
+        //then
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/1/ingredient/new"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("recipe/ingredient/ingredientForm"))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("ingredient"))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("uomList"));
+
+        Mockito.verify(recipeService, Mockito.times(1)).findCommandById(Mockito.anyLong());
+
     }
 
     @Test

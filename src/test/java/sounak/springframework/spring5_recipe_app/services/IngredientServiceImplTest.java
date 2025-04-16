@@ -113,4 +113,30 @@ class IngredientServiceImplTest {
         Mockito.verify(recipeRepository, Mockito.times(1)).findById(Mockito.anyLong());
         Mockito.verify(recipeRepository, Mockito.times(1)).save(Mockito.any(Recipe.class));
     }
+
+    @Test
+    public void saveRecipeCommandTest() {
+        //given
+        IngredientCommand command = new IngredientCommand();
+        command.setId(3L);
+        command.setRecipeId(2L);
+
+        Optional<Recipe> recipeOptional = Optional.of(new Recipe());
+
+        Recipe savedRecipe = new Recipe();
+        savedRecipe.addIngredient(new Ingredient());
+        savedRecipe.getIngredients().iterator().next().setId(3L);
+
+        Mockito.when(recipeRepository.findById(Mockito.anyLong())).thenReturn(recipeOptional);
+        Mockito.when(recipeRepository.save(Mockito.any())).thenReturn(savedRecipe);
+
+        //when
+        IngredientCommand savedCommand = ingredientService.saveIngredientCommand(command);
+
+        //then
+        Assertions.assertEquals(Long.valueOf(3L), savedCommand.getId());
+        Mockito.verify(recipeRepository, Mockito.times(1)).findById(Mockito.anyLong());
+        Mockito.verify(recipeRepository, Mockito.times(1)).save(Mockito.any(Recipe.class));
+
+    }
 }
