@@ -68,7 +68,7 @@ public class IngredientServiceImpl implements IngredientService {
         if (recipeOptional.isEmpty()) {
 
             //todo toss error if not found!
-            log.error("Recipe not found for id: " + command.getRecipeId());
+            log.error("Recipe not found for id: {}", command.getRecipeId());
             return new IngredientCommand();
         } else {
             Recipe recipe = recipeOptional.get();
@@ -111,6 +111,35 @@ public class IngredientServiceImpl implements IngredientService {
 
             //to do check for fail
             return ingredientToIngredientCommand.convert(savedIngredientOptional.get());
+        }
+    }
+
+    @Override
+    public void deleteByRecipeIdAndIngredientId(Long recipeId, Long ingredientId) {
+
+        log.debug("Deleting ingredient id: {}, of recipe id: {}", ingredientId, recipeId);
+
+        Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
+
+        if (recipeOptional.isPresent()) {
+            Recipe recipe = recipeOptional.get();
+            log.debug("Found recipe. ID: {}", recipeId);
+
+            Optional<Ingredient> ingredientOptional = recipe
+                    .getIngredients()
+                    .stream()
+                    .filter(ingredient -> ingredient.getId().equals(ingredientId))
+                    .findFirst();
+
+            if (ingredientOptional.isPresent()) {
+                log.debug("Found ingredient. ID: {}", ingredientId);
+                Ingredient ingredientToDelete = ingredientOptional.get();
+                ingredientToDelete.setRecipe(null);
+                recipe.getIngredients().remove(ingredientOptional.get());
+                recipeRepository.save(recipe);
+            }
+        } else {
+            log.debug("Recipe Id Not found: {}", recipeId);
         }
     }
 }

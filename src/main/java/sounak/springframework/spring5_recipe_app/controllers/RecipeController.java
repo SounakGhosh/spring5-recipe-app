@@ -60,7 +60,7 @@ public class RecipeController {
     @RequestMapping("/recipe/{id}/delete")
     public String deleteRecipe(@PathVariable String id) {
 
-        log.debug("Deleting id: " + id);
+        log.debug("Deleting recipe id: {}", id);
 
         recipeService.deleteById(Long.parseLong(id));
 
